@@ -1,5 +1,5 @@
 *.log
 *.pot
 *.pyc
-local_settings.py
+githubhackers/settings_local.py
 development.db

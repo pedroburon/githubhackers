@@ -1,4 +1,9 @@
-# Django settings for githubhackers project.
+import os
+
+from django.core.urlresolvers import reverse_lazy
+
+
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -100,15 +105,27 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+
+    'social_auth.context_processors.social_auth_by_name_backends',
+    'social_auth.context_processors.social_auth_backends',
+    'social_auth.context_processors.social_auth_by_type_backends',
+)
+
 ROOT_URLCONF = 'githubhackers.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'githubhackers.wsgi.application'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(PROJECT_ROOT, 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -120,6 +137,11 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
+
+    'south',
+    'social_auth',
+    'profiles',
+    'userprofiles',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -150,3 +172,13 @@ LOGGING = {
         },
     }
 }
+
+LOGIN_REDIRECT_URL = reverse_lazy('home')
+
+
+AUTH_PROFILE_MODULE = 'userprofiles.Profile'
+
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.contrib.github.GithubBackend',
+)
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = reverse_lazy('profiles_create_profile')

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+{% if user.is_authenticated %}
+  <h1>
+    {% blocktrans with username=user.username %}
+      Welcome hacker, {{ username }}!
+    {% endblocktrans %}
+  </h1>
+  <h2>
+    <a href="{% url logout %}"
+       id="logout">{% trans 'Logout' %}</a>
+  </h2>
+{% else %}
+  <h1>
+    <a href="{% url socialauth_begin backend='github' %}"
+      id="login">{% trans 'Login with Github' %}</a>
+  </h1>
+{% endif %}
+{% endblock content %}
